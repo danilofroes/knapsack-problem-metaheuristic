@@ -165,11 +165,26 @@ class ILS(KnapsackProblem):
         self.tempo_final_ils = 0
 
     def perturbar_solucao(self, solucao: List[int]) -> List[int]:
-        '''Perturba a solução invertendo bits aleatórios de acordo com o nível de perturbação'''
         nova_solucao = solucao[:]
-        indices = random.sample(range(self.n_itens), self.nivel_perturbacao)
+        
+        indices_um = [i for i, x in enumerate(solucao) if x == 1]
+        indices_zero = [i for i, x in enumerate(solucao) if x == 0]
+        
+        qnt_remover = min(len(indices_um), self.nivel_perturbacao // 2)
+        qnt_adicionar = self.nivel_perturbacao - qnt_remover
+        
+        indices_para_inverter = []
+        
+        if indices_um:
+            indices_para_inverter.extend(random.sample(indices_um, qnt_remover))
+        
+        if indices_zero:
+            indices_para_inverter.extend(random.sample(indices_zero, qnt_adicionar))
+            
+        if not indices_para_inverter:
+             indices_para_inverter = random.sample(range(self.n_itens), self.nivel_perturbacao)
 
-        for idx in indices:
+        for idx in indices_para_inverter:
             nova_solucao[idx] = 1 - nova_solucao[idx]
 
         return nova_solucao
@@ -303,3 +318,24 @@ class ILS(KnapsackProblem):
             
         plt.ylim(0, max(max(tempos), self.capacidade) * 1.15)
         plt.show()
+    
+# class SimulatedAnnealing(KnapsackProblem):
+#     def __init__(self, itens: Dict[str, Dict[str, int]], capacidade: int, 
+#                  temperatura_inicial: float, 
+#                  taxa_decaimento: float, 
+#                  temperatura_final: float = None):
+#         super().__init__(itens, capacidade)
+#         self.temperatura_inicial = temperatura_inicial
+#         self.temperatura_final = temperatura_final
+#         self.taxa_decaimento = taxa_decaimento
+    
+#     @staticmethod
+#     def get_prob_aceitacao(nova_solucao: int, solucao_atual: int, temp: float) -> float:
+#         """Calcula a probabilidade de aceitação de uma nova solução"""
+#         delta_solucao = nova_solucao - solucao_atual
+
+#         if delta_solucao > 0:
+#             return float(nova_solucao)
+        
+#         else:
+#             return math.exp(-delta_solucao / temp)
