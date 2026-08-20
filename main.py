@@ -338,7 +338,7 @@ class MainWindow(QMainWindow):
             rodou_alguma = True
 
         if rodou_alguma:
-            self.log("\n✅ Execução Concluída!")
+            self.log("\nExecução Concluída!")
             self.ax.set_title('Comparativo de Convergência', fontsize=14, fontweight='bold')
             self.ax.set_xlabel('Iterações', fontsize=11)
             self.ax.set_ylabel('Lucro Global Encontrado (R$)', fontsize=11)
@@ -372,7 +372,7 @@ class MainWindow(QMainWindow):
         ga.solve()
         res = ga.getResultados()
 
-        self.log_jsp("✅ Execução Concluída!\n")
+        self.log_jsp("Execução Concluída!\n")
         self.log_jsp(f"Melhor Atraso Total: {res.get('melhor_atraso')} minutos")
         self.log_jsp(f"Melhor Cromossomo: {res.get('melhor_cromossomo')}")
 
@@ -399,13 +399,13 @@ class MainWindow(QMainWindow):
         self.ax_gantt.set_yticks(list(maquinas_y.values()))
         self.ax_gantt.set_yticklabels(list(maquinas_y.keys()))
         self.ax_gantt.set_xlabel("Tempo (minutos)")
-        self.ax_gantt.set_title("Gráfico de Gantt da Melhor Rota (JSP)", fontweight='bold')
+        self.ax_gantt.set_title("Gráfico de Gantt da Melhor Rota", fontweight='bold')
         self.ax_gantt.grid(True, axis='x', linestyle='--', alpha=0.5)
 
         # Curva de Convergência
         historico = res.get("historico_fitness", [])
         self.ax_conv.plot(historico, color='#8e44ad', linewidth=2)
-        self.ax_conv.set_title("Convergência do Genético (Menor é Melhor)", fontsize=10)
+        self.ax_conv.set_title("Convergência do Genético", fontsize=10)
         self.ax_conv.set_xlabel("Gerações", fontsize=9)
         self.ax_conv.set_ylabel("Atraso Total", fontsize=9)
         self.ax_conv.grid(True, linestyle='--', alpha=0.7)
